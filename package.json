@@ -9,8 +9,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "rm -rf build && cd D:/WK_VS/fullstackopen2022/fullstackopen2022/part02/phonebook && yarn build && cp -r build D:/WK_VS/fullstackopen2022-backend",
-    "deploy": "git push heroku main",
+    "build:ui": "shx rm -rf build && cd D:/WK_VS/fullstackopen2022/fullstackopen2022/part02/phonebook && yarn build && shx cp -r build D:/WK_VS/fullstackopen2022-backend",
+    "deploy": "git push fullstackopen2022-backend origin/main",
     "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",
     "logs:prod": "heroku logs --tail"
   },
@@ -20,6 +20,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "shx": "^0.3.4"
   }
 }
