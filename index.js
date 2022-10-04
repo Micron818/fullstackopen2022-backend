@@ -3,26 +3,6 @@ const app = express();
 const cors = require("cors");
 const morgan = require("morgan");
 
-app.use(cors());
-app.use(express.static("build"));
-
-morgan.token("person", function (req) {
-  return JSON.stringify(req.body);
-});
-
-app.use(
-  morgan(
-    "':method :url :status :res[content-length] - :response-time ms :person"
-  )
-);
-
-app.use(express.json());
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
 let persons = [
   {
     id: 1,
@@ -46,8 +26,26 @@ let persons = [
   },
 ];
 
+app.use(cors());
+app.use(express.static("build"));
+
+morgan.token("person", function (req) {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :person"
+  )
+);
+
+app.use(express.json());
+
+
 //get all persons
-app.get("/api/persons", (req, res) => res.json(persons));
+app.get("/api/persons", (req, res) => {
+  return res.json(persons);
+});
 
 //get persons info
 app.get("/info", (req, res) => {
@@ -90,4 +88,10 @@ app.post("/api/persons", (req, res) => {
   persons = persons.concat(person);
 
   res.json(person);
+});
+
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
