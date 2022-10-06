@@ -8,7 +8,25 @@ mongosee
     console.log(`error connecting to MongoDB: ${reason.message} `)
   );
 
-const personSchema = new mongosee.Schema({ name: String, number: String });
+const personSchema = new mongosee.Schema({
+  name: {
+    type: String,
+    minLength: 5,
+    required: [true, 'name missing"'],
+    unique: true,
+  },
+  number: {
+    type: String,
+    required: [true, 'number missing"'],
+    minLength: 8,
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}-?\d+$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+  },
+});
 
 personSchema.set("toJSON", {
   transform: (document, returnObject) => {

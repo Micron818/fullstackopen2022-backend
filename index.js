@@ -59,27 +59,36 @@ app.delete("/api/persons/:id", (req, res, next) => {
 });
 
 //create a new person
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const body = req.body;
 
-  if (!body.name) return res.status(400).json({ error: "name missing" });
+  // if (!body.name) return res.status(400).json({ error: "name missing" });
 
-  if (!body.number) return res.status(400).json({ error: "number missing" });
+  // if (!body.number) return res.status(400).json({ error: "number missing" });
 
   const id = Math.floor(Math.random() * 100000);
   const person = new Person({ id: id, name: body.name, number: body.number });
-
-  person
-    .save()
-    .then((savedPerson) => res.json(savedPerson))
-    .catch((reason) => next(reason));
+  Person.init()
+    .then(() =>
+      person
+        .save()
+        .then((savedPerson) => res.json(savedPerson))
+        .catch((reason) => next(reason))
+    )
+    .catch((reason) => {
+      return next(reason);
+    });
 });
 
 //update person
 app.put("/api/persons/:id", (req, res, next) => {
   const body = req.body;
   const person = { name: body.name, number: body.number };
-  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+  Person.findByIdAndUpdate(req.params.id, person, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedPerson) =>
       updatedPerson
         ? res.json(updatedPerson)
@@ -95,9 +104,15 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.message);
 
   if (err.name === "CastError") {
-    return res.status(400).send({ err: "malformatted id" });
+    return res.status(400).send({ error: "malformatted id" });
+  } else if (err.name === "ValidationError") {
+    return res.status(400).json({ error: err.message });
+  } else if (
+    err.name === "MongoServerError" &&
+    err.codeName === "DuplicateKey"
+  ) {
+    return res.status(400).json({ error: err.message });
   }
-
   next(err);
 };
 
