@@ -11,13 +11,13 @@ mongosee
 const personSchema = new mongosee.Schema({
   name: {
     type: String,
-    minLength: 5,
-    required: [true, 'name missing"'],
+    minLength: 3,
+    required: [true, "name missing"],
     unique: true,
   },
   number: {
     type: String,
-    required: [true, 'number missing"'],
+    required: [true, "number missing"],
     minLength: 8,
     validate: {
       validator: function (v) {

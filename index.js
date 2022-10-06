@@ -61,23 +61,11 @@ app.delete("/api/persons/:id", (req, res, next) => {
 //create a new person
 app.post("/api/persons", (req, res, next) => {
   const body = req.body;
-
-  // if (!body.name) return res.status(400).json({ error: "name missing" });
-
-  // if (!body.number) return res.status(400).json({ error: "number missing" });
-
-  const id = Math.floor(Math.random() * 100000);
-  const person = new Person({ id: id, name: body.name, number: body.number });
-  Person.init()
-    .then(() =>
-      person
-        .save()
-        .then((savedPerson) => res.json(savedPerson))
-        .catch((reason) => next(reason))
-    )
-    .catch((reason) => {
-      return next(reason);
-    });
+  const person = new Person({ name: body.name, number: body.number });
+  person
+    .save()
+    .then((savedPerson) => res.json(savedPerson))
+    .catch((reason) => next(reason));
 });
 
 //update person

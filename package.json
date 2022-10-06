@@ -12,7 +12,8 @@
     "build:ui": "shx rm -rf build && cd D:/WK_VS/fullstackopen2022/fullstackopen2022/part02/phonebook && yarn build && shx cp -r build D:/WK_VS/fullstackopen2022-backend",
     "deploy": "git push origin main:main",
     "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -22,6 +23,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.24.0",
     "nodemon": "^2.0.20",
     "shx": "^0.3.4"
   }

@@ -18,7 +18,7 @@ const personSchema = new mongosee.Schema({ name: String, number: String });
 const Person = mongosee.model("Person", personSchema);
 
 switch (process.argv.length) {
-  case 5:
+  case 5: {
     const person = new Person({
       name: process.argv[3],
       number: process.argv[4],
@@ -29,7 +29,7 @@ switch (process.argv.length) {
       mongosee.connection.close();
     });
     break;
-
+  }
   case 3:
     Person.find({}).then((result) => {
       console.log("phonebook:");
